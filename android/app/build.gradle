@@ -42,6 +42,7 @@ android {
         applicationId "com.souvikbiswas.events_demo"
         minSdkVersion 16
         targetSdkVersion 28
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
