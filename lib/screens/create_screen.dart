@@ -2,6 +2,7 @@ import 'package:events_demo/resources/color.dart';
 import 'package:events_demo/utils/calendar_client.dart';
 import 'package:events_demo/utils/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/calendar/v3.dart' as calendar;
 import 'package:intl/intl.dart';
 
 class CreateScreen extends StatefulWidget {
@@ -35,7 +36,8 @@ class _CreateScreenState extends State<CreateScreen> {
   String currentLocation;
   String currentEmail;
   String errorString = '';
-  List<String> attendeeEmails = [];
+  // List<String> attendeeEmails = [];
+  List<calendar.EventAttendee> attendeeEmails = [];
 
   bool isEditingDate = false;
   bool isEditingStartTime = false;
@@ -732,13 +734,27 @@ class _CreateScreenState extends State<CreateScreen> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            attendeeEmails[index],
-                            style: TextStyle(
-                              color: CustomColor.neon_green,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                attendeeEmails[index].email,
+                                style: TextStyle(
+                                  color: CustomColor.neon_green,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  setState(() {
+                                    attendeeEmails.removeAt(index);
+                                  });
+                                },
+                                color: Colors.red,
+                              ),
+                            ],
                           ),
                         );
                       },
@@ -831,7 +847,14 @@ class _CreateScreenState extends State<CreateScreen> {
                             });
                             if (_validateEmail(currentEmail) == null) {
                               setState(() {
-                                attendeeEmails.add(currentEmail);
+                                textFocusNodeAttendee.unfocus();
+                                calendar.EventAttendee eventAttendee =
+                                    calendar.EventAttendee();
+                                eventAttendee.email = currentEmail;
+
+                                attendeeEmails.add(eventAttendee);
+
+                                textControllerAttendee.text = '';
                                 currentEmail = null;
                                 isEditingEmail = false;
                               });
