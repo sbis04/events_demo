@@ -18,11 +18,13 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController textControllerEndTime;
   TextEditingController textControllerTitle;
   TextEditingController textControllerDesc;
-  TextEditingController textControllerLink;
+  TextEditingController textControllerLocation;
+  TextEditingController textControllerAttendee;
 
   FocusNode textFocusNodeTitle;
   FocusNode textFocusNodeDesc;
-  FocusNode textFocusNodeLink;
+  FocusNode textFocusNodeLocation;
+  FocusNode textFocusNodeAttendee;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedStartTime = TimeOfDay.now();
@@ -30,14 +32,17 @@ class _CreateScreenState extends State<CreateScreen> {
 
   String currentTitle;
   String currentDesc;
-  String currentLink;
+  String currentLocation;
+  String currentEmail;
   String errorString = '';
+  List<String> attendeeEmails = [];
 
   bool isEditingDate = false;
   bool isEditingStartTime = false;
   bool isEditingEndTime = false;
   bool isEditingBatch = false;
   bool isEditingTitle = false;
+  bool isEditingEmail = false;
   bool isEditingLink = false;
   bool isErrorTime = false;
   bool isOffline = false;
@@ -106,14 +111,15 @@ class _CreateScreenState extends State<CreateScreen> {
     return null;
   }
 
-  String _validateLink(String value) {
+  String _validateEmail(String value) {
     if (value != null) {
       value = value.trim();
 
       if (value.isEmpty) {
-        return 'URL can\'t be empty';
+        return 'Can\'t add an empty email';
       } else {
-        final regex = RegExp("^(http|https)://(.*)");
+        final regex = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
         final matches = regex.allMatches(value);
         for (Match match in matches) {
           if (match.start == 0 && match.end == value.length) {
@@ -122,10 +128,10 @@ class _CreateScreenState extends State<CreateScreen> {
         }
       }
     } else {
-      return 'URL can\'t be empty';
+      return 'Can\'t add an empty email';
     }
 
-    return 'Invalid URL';
+    return 'Invalid email';
   }
 
   @override
@@ -135,11 +141,13 @@ class _CreateScreenState extends State<CreateScreen> {
     textControllerEndTime = TextEditingController();
     textControllerTitle = TextEditingController();
     textControllerDesc = TextEditingController();
-    textControllerLink = TextEditingController();
+    textControllerLocation = TextEditingController();
+    textControllerAttendee = TextEditingController();
 
     textFocusNodeTitle = FocusNode();
     textFocusNodeDesc = FocusNode();
-    textFocusNodeLink = FocusNode();
+    textFocusNodeLocation = FocusNode();
+    textFocusNodeAttendee = FocusNode();
 
     super.initState();
   }
@@ -565,7 +573,8 @@ class _CreateScreenState extends State<CreateScreen> {
                       },
                       onSubmitted: (value) {
                         textFocusNodeDesc.unfocus();
-                        // FocusScope.of(context).requestFocus(textFocusNodeLink);
+                        FocusScope.of(context)
+                            .requestFocus(textFocusNodeLocation);
                       },
                       style: TextStyle(
                         color: Colors.black87,
@@ -609,92 +618,226 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                       ),
                     ),
-                    // SizedBox(height: 10),
-                    // RichText(
-                    //   text: TextSpan(
-                    //     text: 'Joinning Link',
-                    //     style: TextStyle(
-                    //       color: CustomColor.dark_cyan,
-                    //       fontFamily: 'Raleway',
-                    //       fontSize: 20,
-                    //       fontWeight: FontWeight.bold,
-                    //       letterSpacing: 1,
-                    //     ),
-                    //     children: <TextSpan>[
-                    //       TextSpan(
-                    //         text: '*',
-                    //         style: TextStyle(
-                    //           color: Colors.red,
-                    //           fontSize: 28,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(height: 10),
-                    // TextField(
-                    //   enabled: true,
-                    //   cursorColor: CustomColor.sea_blue,
-                    //   focusNode: textFocusNodeLink,
-                    //   controller: textControllerLink,
-                    //   textInputAction: TextInputAction.done,
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       isEditingLink = true;
-                    //       currentLink = value;
-                    //     });
-                    //   },
-                    //   onSubmitted: (value) {
-                    //     textFocusNodeLink.unfocus();
-                    //   },
-                    //   style: TextStyle(
-                    //     color: Colors.black87,
-                    //     fontWeight: FontWeight.bold,
-                    //     letterSpacing: 0.5,
-                    //   ),
-                    //   decoration: new InputDecoration(
-                    //     disabledBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //       borderSide: BorderSide(color: Colors.grey, width: 1),
-                    //     ),
-                    //     enabledBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //       borderSide:
-                    //           BorderSide(color: CustomColor.sea_blue, width: 1),
-                    //     ),
-                    //     focusedBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //       borderSide: BorderSide(
-                    //           color: CustomColor.dark_blue, width: 2),
-                    //     ),
-                    //     errorBorder: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //       borderSide:
-                    //           BorderSide(color: Colors.redAccent, width: 2),
-                    //     ),
-                    //     border: OutlineInputBorder(
-                    //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    //     ),
-                    //     contentPadding: EdgeInsets.only(
-                    //       left: 16,
-                    //       bottom: 16,
-                    //       top: 16,
-                    //       right: 16,
-                    //     ),
-                    //     hintText: 'eg: https://us04web.zoom.us/123',
-                    //     hintStyle: TextStyle(
-                    //       color: Colors.grey.withOpacity(0.6),
-                    //       fontWeight: FontWeight.bold,
-                    //       letterSpacing: 0.5,
-                    //     ),
-                    //     errorText:
-                    //         isEditingLink ? _validateLink(currentLink) : null,
-                    //     errorStyle: TextStyle(
-                    //       fontSize: 12,
-                    //       color: Colors.redAccent,
-                    //     ),
-                    //   ),
-                    // ),
+                    SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Location',
+                        style: TextStyle(
+                          color: CustomColor.dark_cyan,
+                          fontFamily: 'Raleway',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' ',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      enabled: true,
+                      cursorColor: CustomColor.sea_blue,
+                      focusNode: textFocusNodeLocation,
+                      controller: textControllerLocation,
+                      textCapitalization: TextCapitalization.words,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        setState(() {
+                          currentLocation = value;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        textFocusNodeLocation.unfocus();
+                        FocusScope.of(context)
+                            .requestFocus(textFocusNodeAttendee);
+                      },
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.5,
+                      ),
+                      decoration: new InputDecoration(
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: Colors.grey, width: 1),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(
+                              color: CustomColor.dark_blue, width: 2),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              BorderSide(color: Colors.redAccent, width: 2),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        contentPadding: EdgeInsets.only(
+                          left: 16,
+                          bottom: 16,
+                          top: 16,
+                          right: 16,
+                        ),
+                        hintText: 'Place of the event',
+                        hintStyle: TextStyle(
+                          color: Colors.grey.withOpacity(0.6),
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Attendees',
+                        style: TextStyle(
+                          color: CustomColor.dark_cyan,
+                          fontFamily: 'Raleway',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' ',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: PageScrollPhysics(),
+                      itemCount: attendeeEmails.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            attendeeEmails[index],
+                            style: TextStyle(
+                              color: CustomColor.neon_green,
+                              fontFamily: 'Raleway',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            enabled: true,
+                            cursorColor: CustomColor.sea_blue,
+                            focusNode: textFocusNodeAttendee,
+                            controller: textControllerAttendee,
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.done,
+                            onChanged: (value) {
+                              setState(() {
+                                currentEmail = value;
+                              });
+                            },
+                            onSubmitted: (value) {
+                              textFocusNodeAttendee.unfocus();
+                            },
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
+                            ),
+                            decoration: new InputDecoration(
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.grey, width: 1),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                    color: CustomColor.sea_blue, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                    color: CustomColor.dark_blue, width: 2),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                    color: Colors.redAccent, width: 2),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                              ),
+                              contentPadding: EdgeInsets.only(
+                                left: 16,
+                                bottom: 16,
+                                top: 16,
+                                right: 16,
+                              ),
+                              hintText: 'Enter attendee email',
+                              hintStyle: TextStyle(
+                                color: Colors.grey.withOpacity(0.6),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                              errorText: isEditingEmail
+                                  ? _validateEmail(currentEmail)
+                                  : null,
+                              errorStyle: TextStyle(
+                                fontSize: 12,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.check_circle,
+                            color: CustomColor.sea_blue,
+                            size: 35,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isEditingEmail = true;
+                            });
+                            if (_validateEmail(currentEmail) == null) {
+                              setState(() {
+                                attendeeEmails.add(currentEmail);
+                                currentEmail = null;
+                                isEditingEmail = false;
+                              });
+                            }
+                          },
+                        )
+                      ],
+                    ),
                     SizedBox(height: 30),
                     Container(
                       width: double.maxFinite,
@@ -713,7 +856,8 @@ class _CreateScreenState extends State<CreateScreen> {
 
                                 textFocusNodeTitle.unfocus();
                                 textFocusNodeDesc.unfocus();
-                                textFocusNodeLink.unfocus();
+                                textFocusNodeLocation.unfocus();
+                                textFocusNodeAttendee.unfocus();
 
                                 if (selectedDate != null &&
                                     selectedStartTime != null &&
@@ -793,7 +937,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                     setState(() {
                                       isErrorTime = true;
                                       errorString =
-                                          'End time should be greater then the start time of the class';
+                                          'Invalid time! Please use a proper start and end time';
                                     });
                                   }
                                 } else {
