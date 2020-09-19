@@ -46,6 +46,8 @@ class _CreateScreenState extends State<CreateScreen> {
   bool isEditingLink = false;
   bool isErrorTime = false;
   bool isOffline = false;
+  bool shouldNofityAttendees = false;
+  bool hasConferenceSupport = false;
 
   bool isDataStorageInProgress = false;
 
@@ -734,8 +736,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             attendeeEmails[index],
                             style: TextStyle(
                               color: CustomColor.neon_green,
-                              fontFamily: 'Raleway',
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               fontSize: 16,
                             ),
                           ),
@@ -744,6 +745,7 @@ class _CreateScreenState extends State<CreateScreen> {
                     ),
                     SizedBox(height: 10),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: TextField(
@@ -751,7 +753,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             cursorColor: CustomColor.sea_blue,
                             focusNode: textFocusNodeAttendee,
                             controller: textControllerAttendee,
-                            textCapitalization: TextCapitalization.words,
+                            textCapitalization: TextCapitalization.none,
                             textInputAction: TextInputAction.done,
                             onChanged: (value) {
                               setState(() {
@@ -835,7 +837,64 @@ class _CreateScreenState extends State<CreateScreen> {
                               });
                             }
                           },
-                        )
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: attendeeEmails.isNotEmpty,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Notify attendees',
+                                style: TextStyle(
+                                  color: CustomColor.dark_cyan,
+                                  fontFamily: 'Raleway',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              Switch(
+                                value: shouldNofityAttendees,
+                                onChanged: (value) {
+                                  setState(() {
+                                    shouldNofityAttendees = value;
+                                  });
+                                },
+                                activeColor: CustomColor.sea_blue,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Add video conferencing',
+                          style: TextStyle(
+                            color: CustomColor.dark_cyan,
+                            fontFamily: 'Raleway',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        Switch(
+                          value: hasConferenceSupport,
+                          onChanged: (value) {
+                            setState(() {
+                              hasConferenceSupport = value;
+                            });
+                          },
+                          activeColor: CustomColor.sea_blue,
+                        ),
                       ],
                     ),
                     SizedBox(height: 30),
