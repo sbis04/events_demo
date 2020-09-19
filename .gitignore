@@ -41,3 +41,4 @@ app.*.symbols
 app.*.map.json
 android/app/google-services.json
 .vscode/launch.json
+ios/Runner/GoogleService-Info.plist
