@@ -1,51 +1,48 @@
 import 'package:events_demo/secrets.dart';
+import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' show Platform;
 
 class CalendarClient {
   static const _scopes = const [CalendarApi.CalendarScope];
 
   Future<Map<String, String>> insert({
-    String title,
-    String description,
-    DateTime startTime,
-    DateTime endTime,
-    String year,
+    @required String title,
+    @required String description,
+    @required String location,
+    @required List<EventAttendee> attendeeEmailList,
+    @required bool shouldNotifyAttendees,
+    @required bool hasConferenceSupport,
+    @required DateTime startTime,
+    @required DateTime endTime,
   }) async {
-    var _clientID = new ClientId(Secret.ANDROID_CLIENT_ID, "");
+    var _clientID = new ClientId(
+      Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID,
+      "",
+    );
     Map<String, String> eventData;
 
-    await clientViaUserConsent(_clientID, _scopes, prompt)
-        .then((AuthClient client) async {
+    await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
       var calendar = CalendarApi(client);
-
-      print('Students notified: $year');
-
-      // List<String> attendeeEmails = UserDetails.getEmailList(year);
-      List<EventAttendee> attendeeEmailList = [];
-
-      // for (String attendeeEmail in attendeeEmails) {
-      //   EventAttendee eventAttendee = EventAttendee();
-      //   eventAttendee.email = attendeeEmail;
-
-      //   attendeeEmailList.add(eventAttendee);
-      // }
 
       String calendarId = "primary";
       Event event = Event();
 
-      ConferenceData conferenceData = ConferenceData();
-      CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
-      conferenceRequest.requestId =
-          "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
-      conferenceData.createRequest = conferenceRequest;
-
       event.summary = title;
       event.description = description;
       event.attendees = attendeeEmailList;
-      event.conferenceData = conferenceData;
-      event.location = "Online";
+      event.location = location;
+
+      if (hasConferenceSupport) {
+        ConferenceData conferenceData = ConferenceData();
+        CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
+        conferenceRequest.requestId = "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
+        conferenceData.createRequest = conferenceRequest;
+
+        event.conferenceData = conferenceData;
+      }
 
       EventDateTime start = new EventDateTime();
       start.dateTime = startTime;
@@ -60,25 +57,25 @@ class CalendarClient {
       try {
         await calendar.events
             .insert(event, calendarId,
-                conferenceDataVersion: 1, sendUpdates: "all")
+                conferenceDataVersion: hasConferenceSupport ? 1 : 0,
+                sendUpdates: shouldNotifyAttendees ? "all" : "none")
             .then((value) {
           print("Event Status: ${value.status}");
           if (value.status == "confirmed") {
-            print(value.conferenceData.conferenceId);
-            print(value.id);
-
             String joiningLink;
             String eventId;
 
             eventId = value.id;
-            joiningLink =
-                "https://meet.google.com/${value.conferenceData.conferenceId}";
+
+            if (hasConferenceSupport) {
+              joiningLink = "https://meet.google.com/${value.conferenceData.conferenceId}";
+            }
 
             eventData = {'id': eventId, 'link': joiningLink};
 
-            print('Event added in google calendar');
+            print('Event added to Google Calendar');
           } else {
-            print("Unable to add event in google calendar");
+            print("Unable to add event to Google Calendar");
           }
         });
       } catch (e) {
@@ -100,8 +97,7 @@ class CalendarClient {
     var _clientID = new ClientId(Secret.ANDROID_CLIENT_ID, "");
     Map<String, String> eventData;
 
-    await clientViaUserConsent(_clientID, _scopes, prompt)
-        .then((AuthClient client) async {
+    await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
       var calendar = CalendarApi(client);
 
       print('Students notified: $year');
@@ -121,8 +117,7 @@ class CalendarClient {
 
       ConferenceData conferenceData = ConferenceData();
       CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
-      conferenceRequest.requestId =
-          "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
+      conferenceRequest.requestId = "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
       conferenceData.createRequest = conferenceRequest;
 
       event.summary = title;
@@ -143,8 +138,7 @@ class CalendarClient {
 
       try {
         await calendar.events
-            .patch(event, calendarId, eventId,
-                conferenceDataVersion: 1, sendUpdates: "all")
+            .patch(event, calendarId, eventId, conferenceDataVersion: 1, sendUpdates: "all")
             .then((value) {
           print("Event Status: ${value.status}");
           if (value.status == "confirmed") {
@@ -155,8 +149,7 @@ class CalendarClient {
             String eventId;
 
             eventId = value.id;
-            joiningLink =
-                "https://meet.google.com/${value.conferenceData.conferenceId}";
+            joiningLink = "https://meet.google.com/${value.conferenceData.conferenceId}";
 
             eventData = {'id': eventId, 'link': joiningLink};
 
@@ -176,16 +169,13 @@ class CalendarClient {
   Future<void> delete(String eventId) async {
     var _clientID = new ClientId(Secret.ANDROID_CLIENT_ID, "");
 
-    await clientViaUserConsent(_clientID, _scopes, prompt)
-        .then((AuthClient client) async {
+    await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
       var calendar = CalendarApi(client);
 
       String calendarId = "primary";
 
       try {
-        await calendar.events
-            .delete(calendarId, eventId, sendUpdates: "all")
-            .then((value) {
+        await calendar.events.delete(calendarId, eventId, sendUpdates: "all").then((value) {
           print('Event deleted from google calendar');
         });
       } catch (e) {
