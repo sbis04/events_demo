@@ -123,7 +123,7 @@ class _CreateScreenState extends State<CreateScreen> {
         return 'Can\'t add an empty email';
       } else {
         final regex = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
         final matches = regex.allMatches(value);
         for (Match match in matches) {
           if (match.start == 0 && match.end == value.length) {
@@ -243,23 +243,19 @@ class _CreateScreenState extends State<CreateScreen> {
                       decoration: new InputDecoration(
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -276,12 +272,11 @@ class _CreateScreenState extends State<CreateScreen> {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
                         ),
-                        errorText:
-                            isEditingDate && textControllerDate.text != null
-                                ? textControllerDate.text.isNotEmpty
-                                    ? null
-                                    : 'Date can\'t be empty'
-                                : null,
+                        errorText: isEditingDate && textControllerDate.text != null
+                            ? textControllerDate.text.isNotEmpty
+                                ? null
+                                : 'Date can\'t be empty'
+                            : null,
                         errorStyle: TextStyle(
                           fontSize: 12,
                           color: Colors.redAccent,
@@ -324,23 +319,19 @@ class _CreateScreenState extends State<CreateScreen> {
                       decoration: new InputDecoration(
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -357,8 +348,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
                         ),
-                        errorText: isEditingStartTime &&
-                                textControllerStartTime.text != null
+                        errorText: isEditingStartTime && textControllerStartTime.text != null
                             ? textControllerStartTime.text.isNotEmpty
                                 ? null
                                 : 'Start time can\'t be empty'
@@ -405,23 +395,19 @@ class _CreateScreenState extends State<CreateScreen> {
                       decoration: new InputDecoration(
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -438,8 +424,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
                         ),
-                        errorText: isEditingEndTime &&
-                                textControllerEndTime.text != null
+                        errorText: isEditingEndTime && textControllerEndTime.text != null
                             ? textControllerEndTime.text.isNotEmpty
                                 ? null
                                 : 'End time can\'t be empty'
@@ -502,18 +487,15 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -530,9 +512,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.5,
                         ),
-                        errorText: isEditingTitle
-                            ? _validateTitle(currentTitle)
-                            : null,
+                        errorText: isEditingTitle ? _validateTitle(currentTitle) : null,
                         errorStyle: TextStyle(
                           fontSize: 12,
                           color: Colors.redAccent,
@@ -577,8 +557,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       },
                       onSubmitted: (value) {
                         textFocusNodeDesc.unfocus();
-                        FocusScope.of(context)
-                            .requestFocus(textFocusNodeLocation);
+                        FocusScope.of(context).requestFocus(textFocusNodeLocation);
                       },
                       style: TextStyle(
                         color: Colors.black87,
@@ -592,18 +571,15 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -659,8 +635,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       },
                       onSubmitted: (value) {
                         textFocusNodeLocation.unfocus();
-                        FocusScope.of(context)
-                            .requestFocus(textFocusNodeAttendee);
+                        FocusScope.of(context).requestFocus(textFocusNodeAttendee);
                       },
                       style: TextStyle(
                         color: Colors.black87,
@@ -674,18 +649,15 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: CustomColor.sea_blue, width: 1),
+                          borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(
-                              color: CustomColor.dark_blue, width: 2),
+                          borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2),
+                          borderSide: BorderSide(color: Colors.redAccent, width: 2),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -786,32 +758,23 @@ class _CreateScreenState extends State<CreateScreen> {
                             ),
                             decoration: new InputDecoration(
                               disabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(color: Colors.grey, width: 1),
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: Colors.grey, width: 1),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                    color: CustomColor.sea_blue, width: 1),
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: CustomColor.sea_blue, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                    color: CustomColor.dark_blue, width: 2),
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: CustomColor.dark_blue, width: 2),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(
-                                    color: Colors.redAccent, width: 2),
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: Colors.redAccent, width: 2),
                               ),
                               border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius: BorderRadius.all(Radius.circular(10.0)),
                               ),
                               contentPadding: EdgeInsets.only(
                                 left: 16,
@@ -825,9 +788,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
                               ),
-                              errorText: isEditingEmail
-                                  ? _validateEmail(currentEmail)
-                                  : null,
+                              errorText: isEditingEmail ? _validateEmail(currentEmail) : null,
                               errorStyle: TextStyle(
                                 fontSize: 12,
                                 color: Colors.redAccent,
@@ -848,8 +809,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             if (_validateEmail(currentEmail) == null) {
                               setState(() {
                                 textFocusNodeAttendee.unfocus();
-                                calendar.EventAttendee eventAttendee =
-                                    calendar.EventAttendee();
+                                calendar.EventAttendee eventAttendee = calendar.EventAttendee();
                                 eventAttendee.email = currentEmail;
 
                                 attendeeEmails.add(eventAttendee);
@@ -961,44 +921,48 @@ class _CreateScreenState extends State<CreateScreen> {
                                     selectedEndTime.minute,
                                   ).millisecondsSinceEpoch;
 
-                                  print(
-                                      'DIFFERENCE: ${endTimeInEpoch - startTimeInEpoch}');
+                                  print('DIFFERENCE: ${endTimeInEpoch - startTimeInEpoch}');
 
-                                  print(
-                                      'Start Time: ${DateTime.fromMillisecondsSinceEpoch(startTimeInEpoch)}');
-                                  print(
-                                      'End Time: ${DateTime.fromMillisecondsSinceEpoch(endTimeInEpoch)}');
+                                  print('Start Time: ${DateTime.fromMillisecondsSinceEpoch(startTimeInEpoch)}');
+                                  print('End Time: ${DateTime.fromMillisecondsSinceEpoch(endTimeInEpoch)}');
 
                                   if (endTimeInEpoch - startTimeInEpoch > 0) {
                                     if (_validateTitle(currentTitle) == null) {
                                       await calendarClient
                                           .insert(
-                                        title: currentTitle,
-                                        description: currentDesc ?? '',
-                                        startTime:
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                startTimeInEpoch),
-                                        endTime:
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                endTimeInEpoch),
-                                      )
+                                              title: currentTitle,
+                                              description: currentDesc ?? '',
+                                              location: currentLocation,
+                                              attendeeEmailList: attendeeEmails,
+                                              shouldNotifyAttendees: shouldNofityAttendees,
+                                              hasConferenceSupport: hasConferenceSupport,
+                                              startTime: DateTime.fromMillisecondsSinceEpoch(startTimeInEpoch),
+                                              endTime: DateTime.fromMillisecondsSinceEpoch(endTimeInEpoch))
                                           .then((eventData) async {
                                         String eventId = eventData['id'];
                                         String eventLink = eventData['link'];
 
+                                        List<String> emails = [];
+
+                                        for (int i = 0; i < attendeeEmails.length; i++)
+                                          emails.add(attendeeEmails[i].email);
+
                                         await storage
                                             .storeEventData(
                                               id: eventId,
-                                              startTimeInEpoch:
-                                                  startTimeInEpoch,
-                                              endTimeInEpoch: endTimeInEpoch,
                                               name: currentTitle,
                                               description: currentDesc ?? '',
-                                              numberOfAttedees: 0,
+                                              location: currentLocation,
+                                              link: eventLink,
+                                              attendeeEmails: emails,
+                                              shouldNotifyAttendees: shouldNofityAttendees,
+                                              hasConfereningSupport: hasConferenceSupport,
+                                              startTimeInEpoch: startTimeInEpoch,
+                                              endTimeInEpoch: endTimeInEpoch,
                                             )
-                                            .whenComplete(
-                                              () => Navigator.of(context).pop(),
-                                            )
+                                            // .whenComplete(
+                                            //   () => Navigator.of(context).pop(),
+                                            // )
                                             .catchError(
                                               (e) => print(e),
                                             );
@@ -1018,8 +982,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                   } else {
                                     setState(() {
                                       isErrorTime = true;
-                                      errorString =
-                                          'Invalid time! Please use a proper start and end time';
+                                      errorString = 'Invalid time! Please use a proper start and end time';
                                     });
                                   }
                                 } else {
@@ -1047,9 +1010,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                   width: 28,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor:
-                                        new AlwaysStoppedAnimation<Color>(
-                                            Colors.white),
+                                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
                                   ),
                                 )
                               : Text(
