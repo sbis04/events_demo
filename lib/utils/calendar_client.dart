@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' show Platform;
 
 class CalendarClient {
   static const _scopes = const [CalendarApi.CalendarScope];
@@ -18,10 +17,7 @@ class CalendarClient {
     @required DateTime startTime,
     @required DateTime endTime,
   }) async {
-    var _clientID = new ClientId(
-      Platform.isAndroid ? Secret.ANDROID_CLIENT_ID : Secret.IOS_CLIENT_ID,
-      "",
-    );
+    var _clientID = new ClientId(Secret.getId(), "");
     Map<String, String> eventData;
 
     await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
@@ -166,8 +162,8 @@ class CalendarClient {
     return eventData;
   }
 
-  Future<void> delete(String eventId) async {
-    var _clientID = new ClientId(Secret.ANDROID_CLIENT_ID, "");
+  Future<void> delete(String eventId, bool shouldNotify) async {
+    var _clientID = new ClientId(Secret.getId(), "");
 
     await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
       var calendar = CalendarApi(client);
@@ -175,11 +171,11 @@ class CalendarClient {
       String calendarId = "primary";
 
       try {
-        await calendar.events.delete(calendarId, eventId, sendUpdates: "all").then((value) {
-          print('Event deleted from google calendar');
+        await calendar.events.delete(calendarId, eventId, sendUpdates: shouldNotify ? "all" : "null").then((value) {
+          print('Event deleted from Google Calendar');
         });
       } catch (e) {
-        print('Error creating event $e');
+        print('Error deleting event: $e');
       }
     });
   }
