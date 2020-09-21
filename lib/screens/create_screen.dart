@@ -462,7 +462,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       cursorColor: CustomColor.sea_blue,
                       focusNode: textFocusNodeTitle,
                       controller: textControllerTitle,
-                      textCapitalization: TextCapitalization.words,
+                      textCapitalization: TextCapitalization.sentences,
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
                         setState(() {
@@ -959,9 +959,9 @@ class _CreateScreenState extends State<CreateScreen> {
                                               startTimeInEpoch: startTimeInEpoch,
                                               endTimeInEpoch: endTimeInEpoch,
                                             )
-                                            // .whenComplete(
-                                            //   () => Navigator.of(context).pop(),
-                                            // )
+                                            .whenComplete(
+                                              () => Navigator.of(context).pop(),
+                                            )
                                             .catchError(
                                               (e) => print(e),
                                             );
