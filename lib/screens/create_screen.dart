@@ -47,7 +47,6 @@ class _CreateScreenState extends State<CreateScreen> {
   bool isEditingEmail = false;
   bool isEditingLink = false;
   bool isErrorTime = false;
-  bool isOffline = false;
   bool shouldNofityAttendees = false;
   bool hasConferenceSupport = false;
 
@@ -888,7 +887,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         focusElevation: 0,
                         highlightElevation: 0,
                         color: CustomColor.sea_blue,
-                        onPressed: isDataStorageInProgress || isOffline
+                        onPressed: isDataStorageInProgress
                             ? null
                             : () async {
                                 setState(() {
@@ -1043,35 +1042,6 @@ class _CreateScreenState extends State<CreateScreen> {
                     ),
                     SizedBox(height: 30),
                   ],
-                ),
-              ),
-            ),
-          ),
-          Visibility(
-            visible: isOffline,
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.maxFinite,
-                  // height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 8.0,
-                      bottom: 8.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: Text(
-                      'Your device is offline. You won\'t be able to upload any details.',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
                 ),
               ),
             ),
