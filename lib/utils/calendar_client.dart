@@ -83,12 +83,15 @@ class CalendarClient {
   }
 
   Future<Map<String, String>> modify({
-    String title,
-    String description,
-    DateTime startTime,
-    DateTime endTime,
-    String eventId,
-    String year,
+    @required String id,
+    @required String title,
+    @required String description,
+    @required String location,
+    @required List<EventAttendee> attendeeEmailList,
+    @required bool shouldNotifyAttendees,
+    @required bool hasConferenceSupport,
+    @required DateTime startTime,
+    @required DateTime endTime,
   }) async {
     var _clientID = new ClientId(Secret.ANDROID_CLIENT_ID, "");
     Map<String, String> eventData;
@@ -96,31 +99,22 @@ class CalendarClient {
     await clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) async {
       var calendar = CalendarApi(client);
 
-      print('Students notified: $year');
-
-      // List<String> attendeeEmails = UserDetails.getEmailList(year);
-      List<EventAttendee> attendeeEmailList = [];
-
-      // for (String attendeeEmail in attendeeEmails) {
-      //   EventAttendee eventAttendee = EventAttendee();
-      //   eventAttendee.email = attendeeEmail;
-
-      //   attendeeEmailList.add(eventAttendee);
-      // }
-
       String calendarId = "primary";
       Event event = Event();
-
-      ConferenceData conferenceData = ConferenceData();
-      CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
-      conferenceRequest.requestId = "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
-      conferenceData.createRequest = conferenceRequest;
 
       event.summary = title;
       event.description = description;
       event.attendees = attendeeEmailList;
-      event.conferenceData = conferenceData;
-      event.location = "Online";
+      event.location = location;
+
+      if (hasConferenceSupport) {
+        ConferenceData conferenceData = ConferenceData();
+        CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
+        conferenceRequest.requestId = "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
+        conferenceData.createRequest = conferenceRequest;
+
+        event.conferenceData = conferenceData;
+      }
 
       EventDateTime start = new EventDateTime();
       start.dateTime = startTime;
@@ -134,18 +128,20 @@ class CalendarClient {
 
       try {
         await calendar.events
-            .patch(event, calendarId, eventId, conferenceDataVersion: 1, sendUpdates: "all")
+            .patch(event, calendarId, id,
+                conferenceDataVersion: hasConferenceSupport ? 1 : 0,
+                sendUpdates: shouldNotifyAttendees ? "all" : "none")
             .then((value) {
           print("Event Status: ${value.status}");
           if (value.status == "confirmed") {
-            print(value.conferenceData.conferenceId);
-            print(value.id);
-
             String joiningLink;
             String eventId;
 
             eventId = value.id;
-            joiningLink = "https://meet.google.com/${value.conferenceData.conferenceId}";
+
+            if (hasConferenceSupport) {
+              joiningLink = "https://meet.google.com/${value.conferenceData.conferenceId}";
+            }
 
             eventData = {'id': eventId, 'link': joiningLink};
 
