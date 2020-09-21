@@ -22,8 +22,6 @@ class Storage {
     @required int startTimeInEpoch,
     @required int endTimeInEpoch,
   }) async {
-    // TODO: Initialize it only once during the starting of the app
-    await Firebase.initializeApp();
     DocumentReference documentReferencer = documentReference.collection('events').doc(id);
 
     Map<String, dynamic> data = <String, dynamic>{
@@ -43,6 +41,14 @@ class Storage {
     await documentReferencer.set(data).whenComplete(() {
       print("Event added to the database, id: {$id}");
     }).catchError((e) => print(e));
+  }
+
+  Future<void> deleteEvent({@required String id}) async {
+    DocumentReference documentReferencer = documentReference.collection('events').doc(id);
+
+    await documentReferencer.delete().catchError((e) => print(e));
+
+    print('Event deleted, id: $id');
   }
 
   Stream<QuerySnapshot> retrieveEvents() {
