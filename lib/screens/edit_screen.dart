@@ -36,6 +36,7 @@ class _EditScreenState extends State<EditScreen> {
   TimeOfDay selectedStartTime = TimeOfDay.now();
   TimeOfDay selectedEndTime = TimeOfDay.now();
 
+  String eventId;
   String currentTitle;
   String currentDesc;
   String currentLocation;
@@ -144,14 +145,27 @@ class _EditScreenState extends State<EditScreen> {
 
   @override
   void initState() {
+    DateTime startTime = DateTime.fromMillisecondsSinceEpoch(widget.event.startTimeInEpoch);
+    DateTime endTime = DateTime.fromMillisecondsSinceEpoch(widget.event.endTimeInEpoch);
+
+    selectedStartTime = TimeOfDay.fromDateTime(startTime);
+    selectedEndTime = TimeOfDay.fromDateTime(endTime);
     currentTitle = widget.event.name;
     currentDesc = widget.event.description;
     currentLocation = widget.event.location;
-    attendeeEmails = widget.event.attendeeEmails;
+    eventId = widget.event.id;
+    hasConferenceSupport = widget.event.hasConfereningSupport;
 
-    String dateString = DateFormat.yMMMMd().format(DateTime.fromMillisecondsSinceEpoch(widget.event.startTimeInEpoch));
-    String startString = DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(widget.event.startTimeInEpoch));
-    String endString = DateFormat.jm().format(DateTime.fromMillisecondsSinceEpoch(widget.event.endTimeInEpoch));
+    widget.event.attendeeEmails.forEach((element) {
+      calendar.EventAttendee eventAttendee = calendar.EventAttendee();
+      eventAttendee.email = element;
+
+      attendeeEmails.add(eventAttendee);
+    });
+
+    String dateString = DateFormat.yMMMMd().format(startTime);
+    String startString = DateFormat.jm().format(startTime);
+    String endString = DateFormat.jm().format(endTime);
 
     textControllerDate = TextEditingController(text: dateString);
     textControllerStartTime = TextEditingController(text: startString);
@@ -197,9 +211,9 @@ class _EditScreenState extends State<EditScreen> {
                       isDeletionInProgress = true;
                       isDataStorageInProgress = true;
                     });
-                    await calendarClient.delete(widget.event.id, true).whenComplete(() async {
+                    await calendarClient.delete(eventId, true).whenComplete(() async {
                       await storage
-                          .deleteEvent(id: widget.event.id)
+                          .deleteEvent(id: eventId)
                           .whenComplete(() => Navigator.of(context).pop())
                           .catchError((e) => print(e));
                     });
@@ -910,31 +924,6 @@ class _EditScreenState extends State<EditScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Add video conferencing',
-                          style: TextStyle(
-                            color: CustomColor.dark_cyan,
-                            fontFamily: 'Raleway',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                        Switch(
-                          value: hasConferenceSupport,
-                          onChanged: (value) {
-                            setState(() {
-                              hasConferenceSupport = value;
-                            });
-                          },
-                          activeColor: CustomColor.sea_blue,
-                        ),
-                      ],
-                    ),
                     SizedBox(height: 30),
                     Container(
                       width: double.maxFinite,
@@ -984,7 +973,8 @@ class _EditScreenState extends State<EditScreen> {
                                   if (endTimeInEpoch - startTimeInEpoch > 0) {
                                     if (_validateTitle(currentTitle) == null) {
                                       await calendarClient
-                                          .insert(
+                                          .modify(
+                                              id: eventId,
                                               title: currentTitle,
                                               description: currentDesc ?? '',
                                               location: currentLocation,
@@ -1003,7 +993,7 @@ class _EditScreenState extends State<EditScreen> {
                                           emails.add(attendeeEmails[i].email);
 
                                         await storage
-                                            .storeEventData(
+                                            .updateEventData(
                                               id: eventId,
                                               name: currentTitle,
                                               description: currentDesc ?? '',
@@ -1015,9 +1005,9 @@ class _EditScreenState extends State<EditScreen> {
                                               startTimeInEpoch: startTimeInEpoch,
                                               endTimeInEpoch: endTimeInEpoch,
                                             )
-                                            // .whenComplete(
-                                            //   () => Navigator.of(context).pop(),
-                                            // )
+                                            .whenComplete(
+                                              () => Navigator.of(context).pop(),
+                                            )
                                             .catchError(
                                               (e) => print(e),
                                             );
@@ -1069,7 +1059,7 @@ class _EditScreenState extends State<EditScreen> {
                                   ),
                                 )
                               : Text(
-                                  'ADD',
+                                  'MODIFY',
                                   style: TextStyle(
                                     fontFamily: 'Raleway',
                                     fontSize: 22,
