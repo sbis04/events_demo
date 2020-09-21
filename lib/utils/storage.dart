@@ -44,4 +44,10 @@ class Storage {
       print("Event added to the database, id: {$id}");
     }).catchError((e) => print(e));
   }
+
+  Stream<QuerySnapshot> retrieveEvents() {
+    Stream<QuerySnapshot> myClasses = documentReference.collection('events').orderBy('start').snapshots();
+
+    return myClasses;
+  }
 }
