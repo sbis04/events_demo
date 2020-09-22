@@ -2,13 +2,12 @@ import 'package:events_demo/screens/dashboard_screen.dart';
 import 'package:events_demo/secrets.dart';
 import 'package:events_demo/utils/calendar_client.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis/calendar/v3.dart' as cal;
 import 'dart:io' show Platform;
-
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   if (Platform.isAndroid) {
