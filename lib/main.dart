@@ -30,10 +30,6 @@ Future<void> main() async {
 }
 
 void prompt(String url) async {
-  print("Please go to the following URL and grant access:");
-  print("  => $url");
-  print("");
-
   if (await canLaunch(url)) {
     await launch(url);
   } else {
