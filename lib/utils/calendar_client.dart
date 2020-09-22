@@ -167,7 +167,7 @@ class CalendarClient {
       String calendarId = "primary";
 
       try {
-        await calendar.events.delete(calendarId, eventId, sendUpdates: shouldNotify ? "all" : "null").then((value) {
+        await calendar.events.delete(calendarId, eventId, sendUpdates: shouldNotify ? "all" : "none").then((value) {
           print('Event deleted from Google Calendar');
         });
       } catch (e) {
