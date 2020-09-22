@@ -206,117 +206,22 @@ class _EditScreenState extends State<EditScreen> {
             highlightColor: Colors.transparent,
             onPressed: isDeletionInProgress
                 ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      icon: Icon(Icons.close),
-                                      color: Colors.grey,
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 24, right: 24),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Do you want to send email to notify the attendees?',
-                                        style: TextStyle(
-                                          fontFamily: 'Raleway',
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          FlatButton(
-                                            splashColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            child: Text(
-                                              'No',
-                                              textScaleFactor: 1.2,
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              Navigator.of(context).pop();
-                                              setState(() {
-                                                isDeletionInProgress = true;
-                                                isDataStorageInProgress = true;
-                                              });
-                                              await calendarClient.delete(eventId, false).whenComplete(() async {
-                                                await storage
-                                                    .deleteEvent(id: eventId)
-                                                    .whenComplete(() => Navigator.of(context).pop())
-                                                    .catchError((e) => print(e));
-                                              });
+                : () async {
+                    setState(() {
+                      isDeletionInProgress = true;
+                      isDataStorageInProgress = true;
+                    });
+                    await calendarClient.delete(eventId, true).whenComplete(() async {
+                      await storage
+                          .deleteEvent(id: eventId)
+                          .whenComplete(() => Navigator.of(context).pop())
+                          .catchError((e) => print(e));
+                    });
 
-                                              setState(() {
-                                                isDeletionInProgress = false;
-                                                isDataStorageInProgress = false;
-                                              });
-                                            },
-                                          ),
-                                          FlatButton(
-                                            splashColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            child: Text(
-                                              'Yes',
-                                              textScaleFactor: 1.2,
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              Navigator.of(context).pop();
-                                              setState(() {
-                                                isDeletionInProgress = true;
-                                                isDataStorageInProgress = true;
-                                              });
-                                              await calendarClient.delete(eventId, true).whenComplete(() async {
-                                                await storage
-                                                    .deleteEvent(id: eventId)
-                                                    .whenComplete(() => Navigator.of(context).pop())
-                                                    .catchError((e) => print(e));
-                                              });
-
-                                              setState(() {
-                                                isDeletionInProgress = false;
-                                                isDataStorageInProgress = false;
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    setState(() {
+                      isDeletionInProgress = false;
+                      isDataStorageInProgress = false;
+                    });
                   },
             color: Colors.white,
             child: isDeletionInProgress
