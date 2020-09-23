@@ -94,15 +94,6 @@ class CalendarClient {
     event.attendees = attendeeEmailList;
     event.location = location;
 
-    if (hasConferenceSupport) {
-      ConferenceData conferenceData = ConferenceData();
-      CreateConferenceRequest conferenceRequest = CreateConferenceRequest();
-      conferenceRequest.requestId = "${startTime.millisecondsSinceEpoch}-${endTime.millisecondsSinceEpoch}";
-      conferenceData.createRequest = conferenceRequest;
-
-      event.conferenceData = conferenceData;
-    }
-
     EventDateTime start = new EventDateTime();
     start.dateTime = startTime;
     start.timeZone = "GMT+05:30";
