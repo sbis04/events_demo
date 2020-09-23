@@ -47,7 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.only(
           left: 16.0,
           right: 16.0,
-          bottom: 30.0,
         ),
         child: Container(
           padding: EdgeInsets.only(top: 8.0),
