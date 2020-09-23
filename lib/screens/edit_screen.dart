@@ -992,22 +992,22 @@ class _EditScreenState extends State<EditScreen> {
                                         for (int i = 0; i < attendeeEmails.length; i++)
                                           emails.add(attendeeEmails[i].email);
 
+                                        EventInfo eventInfo = EventInfo(
+                                          id: eventId,
+                                          name: currentTitle,
+                                          description: currentDesc ?? '',
+                                          location: currentLocation,
+                                          link: eventLink,
+                                          attendeeEmails: emails,
+                                          shouldNotifyAttendees: shouldNofityAttendees,
+                                          hasConfereningSupport: hasConferenceSupport,
+                                          startTimeInEpoch: startTimeInEpoch,
+                                          endTimeInEpoch: endTimeInEpoch,
+                                        );
+
                                         await storage
-                                            .updateEventData(
-                                              id: eventId,
-                                              name: currentTitle,
-                                              description: currentDesc ?? '',
-                                              location: currentLocation,
-                                              link: eventLink,
-                                              attendeeEmails: emails,
-                                              shouldNotifyAttendees: shouldNofityAttendees,
-                                              hasConfereningSupport: hasConferenceSupport,
-                                              startTimeInEpoch: startTimeInEpoch,
-                                              endTimeInEpoch: endTimeInEpoch,
-                                            )
-                                            .whenComplete(
-                                              () => Navigator.of(context).pop(),
-                                            )
+                                            .updateEventData(eventInfo)
+                                            .whenComplete(() => Navigator.of(context).pop())
                                             .catchError(
                                               (e) => print(e),
                                             );

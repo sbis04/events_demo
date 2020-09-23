@@ -1,3 +1,4 @@
+import 'package:events_demo/models/event_info.dart';
 import 'package:events_demo/resources/color.dart';
 import 'package:events_demo/utils/calendar_client.dart';
 import 'package:events_demo/utils/storage.dart';
@@ -946,22 +947,22 @@ class _CreateScreenState extends State<CreateScreen> {
                                         for (int i = 0; i < attendeeEmails.length; i++)
                                           emails.add(attendeeEmails[i].email);
 
+                                        EventInfo eventInfo = EventInfo(
+                                          id: eventId,
+                                          name: currentTitle,
+                                          description: currentDesc ?? '',
+                                          location: currentLocation,
+                                          link: eventLink,
+                                          attendeeEmails: emails,
+                                          shouldNotifyAttendees: shouldNofityAttendees,
+                                          hasConfereningSupport: hasConferenceSupport,
+                                          startTimeInEpoch: startTimeInEpoch,
+                                          endTimeInEpoch: endTimeInEpoch,
+                                        );
+
                                         await storage
-                                            .storeEventData(
-                                              id: eventId,
-                                              name: currentTitle,
-                                              description: currentDesc ?? '',
-                                              location: currentLocation,
-                                              link: eventLink,
-                                              attendeeEmails: emails,
-                                              shouldNotifyAttendees: shouldNofityAttendees,
-                                              hasConfereningSupport: hasConferenceSupport,
-                                              startTimeInEpoch: startTimeInEpoch,
-                                              endTimeInEpoch: endTimeInEpoch,
-                                            )
-                                            .whenComplete(
-                                              () => Navigator.of(context).pop(),
-                                            )
+                                            .storeEventData(eventInfo)
+                                            .whenComplete(() => Navigator.of(context).pop())
                                             .catchError(
                                               (e) => print(e),
                                             );
