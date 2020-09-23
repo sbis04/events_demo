@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Event {
+class EventInfo {
   final String id;
   final String name;
   final String description;
@@ -12,7 +12,7 @@ class Event {
   final int startTimeInEpoch;
   final int endTimeInEpoch;
 
-  Event({
+  EventInfo({
     @required this.id,
     @required this.name,
     @required this.description,
@@ -25,7 +25,7 @@ class Event {
     @required this.endTimeInEpoch,
   });
 
-  Event.fromMap(Map snapshot)
+  EventInfo.fromMap(Map snapshot)
       : id = snapshot['id'] ?? '',
         name = snapshot['name'] ?? '',
         description = snapshot['desc'],

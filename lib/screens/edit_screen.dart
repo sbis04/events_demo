@@ -1,4 +1,4 @@
-import 'package:events_demo/models/event.dart';
+import 'package:events_demo/models/event_info.dart';
 import 'package:events_demo/resources/color.dart';
 import 'package:events_demo/utils/calendar_client.dart';
 import 'package:events_demo/utils/storage.dart';
@@ -7,7 +7,7 @@ import 'package:googleapis/calendar/v3.dart' as calendar;
 import 'package:intl/intl.dart';
 
 class EditScreen extends StatefulWidget {
-  final Event event;
+  final EventInfo event;
 
   EditScreen({this.event});
 

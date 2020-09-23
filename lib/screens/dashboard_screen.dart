@@ -1,4 +1,4 @@
-import 'package:events_demo/models/event.dart';
+import 'package:events_demo/models/event_info.dart';
 import 'package:events_demo/resources/color.dart';
 import 'package:events_demo/screens/create_screen.dart';
 import 'package:events_demo/screens/edit_screen.dart';
@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     itemBuilder: (context, index) {
                       Map<String, dynamic> eventInfo = snapshot.data.documents[index].data();
 
-                      Event event = Event.fromMap(eventInfo);
+                      EventInfo event = EventInfo.fromMap(eventInfo);
 
                       DateTime startTime = DateTime.fromMillisecondsSinceEpoch(event.startTimeInEpoch);
                       DateTime endTime = DateTime.fromMillisecondsSinceEpoch(event.endTimeInEpoch);
