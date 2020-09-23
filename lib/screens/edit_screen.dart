@@ -618,7 +618,7 @@ class _EditScreenState extends State<EditScreen> {
                       focusNode: textFocusNodeDesc,
                       controller: textControllerDesc,
                       textCapitalization: TextCapitalization.sentences,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.next,
                       onChanged: (value) {
                         setState(() {
                           currentDesc = value;
